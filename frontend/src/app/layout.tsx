@@ -8,11 +8,12 @@ const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 export const metadata: Metadata = {
   title: 'Habit Tracker',
   description: 'Трекер привычек с аналитикой и общими целями',
+  icons: { icon: '/logo.svg' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>

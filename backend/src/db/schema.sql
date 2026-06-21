@@ -73,6 +73,20 @@ CREATE TABLE IF NOT EXISTS reminders (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Calendar events
+CREATE TABLE IF NOT EXISTS calendar_events (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  start_time TIMESTAMPTZ NOT NULL,
+  end_time TIMESTAMPTZ,
+  color VARCHAR(7) DEFAULT '#6366f1',
+  all_day BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_habits_user_id ON habits(user_id);
 CREATE INDEX IF NOT EXISTS idx_habit_logs_habit_id ON habit_logs(habit_id);
@@ -91,11 +105,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS users_updated_at ON users;
 CREATE TRIGGER users_updated_at BEFORE UPDATE ON users
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
+DROP TRIGGER IF EXISTS habits_updated_at ON habits;
 CREATE TRIGGER habits_updated_at BEFORE UPDATE ON habits
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
+DROP TRIGGER IF EXISTS shared_habits_updated_at ON shared_habits;
 CREATE TRIGGER shared_habits_updated_at BEFORE UPDATE ON shared_habits
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+DROP TRIGGER IF EXISTS calendar_events_updated_at ON calendar_events;
+CREATE TRIGGER calendar_events_updated_at BEFORE UPDATE ON calendar_events
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();

@@ -1,5 +1,6 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { SignJWT } from 'jose';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -39,21 +40,34 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    // Добавляем id и accessToken в JWT
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.sub = user.id;
+        token.email = user.email;
+        token.name = user.name;
+
+        // Создаём обычный HS256 JWT для Express-бэкенда
+        const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+        token.apiToken = await new SignJWT({
+          sub: user.id,
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        })
+          .setProtectedHeader({ alg: 'HS256' })
+          .setExpirationTime('7d')
+          .sign(secret);
       }
       return token;
     },
-    // Передаём accessToken в сессию (для apiFetch)
+
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
       }
-      // Сам JWT токен передаём фронту, чтобы отправлять бэкенду
-      (session as any).accessToken = token;
+      // Передаём API-токен фронту для запросов к Express
+      (session as any).accessToken = token.apiToken;
       return session;
     },
   },

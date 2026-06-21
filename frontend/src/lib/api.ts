@@ -73,6 +73,32 @@ export const addReminder = (habitId: string, remind_at: string) =>
     body: JSON.stringify({ remind_at }),
   });
 
+// ─── Calendar ─────────────────────────────────────────────────────────────────
+
+export interface CalendarEvent {
+  id: string;
+  user_id: string;
+  title: string;
+  description?: string;
+  start_time: string;
+  end_time?: string;
+  color: string;
+  all_day: boolean;
+  created_at: string;
+}
+
+export const getEvents = (year: number, month: number) =>
+  apiFetch<CalendarEvent[]>(`/api/events?year=${year}&month=${month}`);
+
+export const createEvent = (data: Partial<CalendarEvent>) =>
+  apiFetch<CalendarEvent>('/api/events', { method: 'POST', body: JSON.stringify(data) });
+
+export const updateEvent = (id: string, data: Partial<CalendarEvent>) =>
+  apiFetch<CalendarEvent>(`/api/events/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+
+export const deleteEvent = (id: string) =>
+  apiFetch(`/api/events/${id}`, { method: 'DELETE' });
+
 // ─── Shared ───────────────────────────────────────────────────────────────────
 
 export const getSharedHabits = () => apiFetch<SharedHabit[]>('/api/shared');
@@ -88,3 +114,8 @@ export const removeShared = (shareId: string) =>
 
 export const getLeaderboard = (habitId: string) =>
   apiFetch(`/api/shared/leaderboard/${habitId}`);
+
+export const getSharedToday = (habitId: string) =>
+  apiFetch<{ id: string; name: string; avatar_url?: string; done_today: boolean }[]>(
+    `/api/shared/today/${habitId}`
+  );

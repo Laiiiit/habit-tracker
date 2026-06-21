@@ -117,6 +117,34 @@ router.delete('/:shareId', async (req, res) => {
   }
 });
 
+// GET /api/shared/today/:habitId — кто сегодня выполнил, кто нет
+router.get('/today/:habitId', async (req, res) => {
+  try {
+    // Владелец + принятые участники
+    const { rows } = await pool.query(
+      `SELECT u.id, u.name, u.avatar_url,
+              EXISTS (
+                SELECT 1 FROM habit_logs hl
+                WHERE hl.habit_id = $1 AND hl.user_id = u.id
+                  AND hl.completed_date = CURRENT_DATE
+              ) AS done_today
+       FROM (
+         SELECT user_id FROM habits WHERE id = $1
+         UNION
+         SELECT shared_with_id FROM shared_habits
+         WHERE habit_id = $1 AND status = 'accepted'
+       ) participants
+       JOIN users u ON u.id = participants.user_id
+       ORDER BY done_today DESC, u.name ASC`,
+      [req.params.habitId]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
 // GET /api/shared/leaderboard/:habitId — рейтинг участников привычки
 router.get('/leaderboard/:habitId', async (req, res) => {
   try {

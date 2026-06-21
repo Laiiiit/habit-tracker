@@ -13,15 +13,22 @@ router.get('/', async (req, res) => {
   try {
     const { rows } = await pool.query(
       `SELECT h.*,
-        -- кол-во выполнений сегодня
         (SELECT COUNT(*) FROM habit_logs hl
          WHERE hl.habit_id = h.id AND hl.user_id = $1
            AND hl.completed_date = CURRENT_DATE) AS today_count,
-        -- общее кол-во выполнений
         (SELECT COUNT(*) FROM habit_logs hl
          WHERE hl.habit_id = h.id AND hl.user_id = $1) AS total_count
        FROM habits h
-       WHERE h.user_id = $1 AND h.is_active = TRUE
+       WHERE h.is_active = TRUE
+         AND (
+           h.user_id = $1
+           OR EXISTS (
+             SELECT 1 FROM shared_habits sh
+             WHERE sh.habit_id = h.id
+               AND sh.shared_with_id = $1
+               AND sh.status = 'accepted'
+           )
+         )
        ORDER BY h.created_at ASC`,
       [req.user.id]
     );
@@ -200,7 +207,6 @@ router.delete('/:id', async (req, res) => {
 // POST /api/habits/:id/log — отметить выполнение
 router.post('/:id/log', async (req, res) => {
   const { date, notes } = req.body;
-  const completedDate = date || new Date().toISOString().split('T')[0];
 
   try {
     // Убеждаемся, что пользователь имеет доступ к привычке
@@ -214,14 +220,14 @@ router.post('/:id/log', async (req, res) => {
     );
     if (!habit.rows[0]) return res.status(404).json({ error: 'Привычка не найдена' });
 
-    // Upsert: если запись на эту дату уже есть — увеличиваем count
+    // Дата: если передана — используем, иначе CURRENT_DATE (PostgreSQL, тот же часовой пояс что и в SELECT)
     const { rows } = await pool.query(
       `INSERT INTO habit_logs (habit_id, user_id, completed_date, notes)
-       VALUES ($1, $2, $3, $4)
+       VALUES ($1, $2, COALESCE($3::date, CURRENT_DATE), $4)
        ON CONFLICT (habit_id, user_id, completed_date)
        DO UPDATE SET count = habit_logs.count + 1, notes = EXCLUDED.notes
        RETURNING *`,
-      [req.params.id, req.user.id, completedDate, notes || null]
+      [req.params.id, req.user.id, date || null, notes || null]
     );
 
     res.status(201).json(rows[0]);

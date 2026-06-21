@@ -51,18 +51,27 @@ export default function HabitsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Все привычки</h1>
-          <Link href="/habits/new" className="btn-primary">
-            + Добавить
-          </Link>
+
+        {/* Баннер */}
+        <div className="relative rounded-2xl overflow-hidden h-36 mb-6">
+          <img src="/images/bookshelf.jpg.jpg" alt="bookshelf" className="w-full h-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/50 to-transparent" />
+          <div className="absolute inset-0 flex items-center justify-between px-6">
+            <div>
+              <h1 className="text-2xl font-bold text-white">Все привычки</h1>
+              <p className="text-white/65 text-sm mt-1">Твоя личная коллекция</p>
+            </div>
+            <Link href="/habits/new" className="bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-white/30 transition-colors">
+              + Добавить
+            </Link>
+          </div>
         </div>
 
         {loading ? (
-          <div className="text-center py-12 text-gray-400">Загрузка...</div>
+          <div className="text-center py-12 text-gray-400 dark:text-slate-500">Загрузка...</div>
         ) : habits.length === 0 ? (
           <div className="card text-center py-12">
             <div className="text-5xl mb-4">📋</div>

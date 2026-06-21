@@ -57,10 +57,10 @@ export default function NewHabitPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Новая привычка</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-6">Новая привычка</h1>
 
         <form onSubmit={handleSubmit} className="card space-y-5">
           {/* Название */}
@@ -99,8 +99,8 @@ export default function NewHabitPage() {
                   onClick={() => setForm({ ...form, icon })}
                   className={`text-2xl p-2 rounded-xl border-2 transition-colors ${
                     form.icon === icon
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-transparent hover:border-gray-200'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-500/10'
+                      : 'border-transparent hover:border-gray-200 dark:hover:border-slate-600'
                   }`}
                 >
                   {icon}
@@ -138,8 +138,8 @@ export default function NewHabitPage() {
                   onClick={() => setForm({ ...form, frequency: freq })}
                   className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition-colors ${
                     form.frequency === freq
-                      ? 'border-primary-500 bg-primary-50 text-primary-700'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-400'
+                      : 'border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-500'
                   }`}
                 >
                   {freq === 'daily' ? 'Ежедневно' : 'По дням недели'}
@@ -157,7 +157,7 @@ export default function NewHabitPage() {
                     className={`w-9 h-9 rounded-full text-sm font-medium border-2 transition-colors ${
                       form.frequency_days.includes(i)
                         ? 'border-primary-500 bg-primary-500 text-white'
-                        : 'border-gray-200 text-gray-600 hover:border-primary-300'
+                        : 'border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-primary-300'
                     }`}
                   >
                     {day}
@@ -174,7 +174,7 @@ export default function NewHabitPage() {
               <button
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, target_count: Math.max(1, f.target_count - 1) }))}
-                className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-lg"
+                className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 font-bold text-lg text-gray-800 dark:text-slate-100"
               >
                 −
               </button>
@@ -182,11 +182,11 @@ export default function NewHabitPage() {
               <button
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, target_count: f.target_count + 1 }))}
-                className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-lg"
+                className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 font-bold text-lg text-gray-800 dark:text-slate-100"
               >
                 +
               </button>
-              <span className="text-sm text-gray-500">раз</span>
+              <span className="text-sm text-gray-500 dark:text-slate-400">раз</span>
             </div>
           </div>
 
@@ -195,19 +195,19 @@ export default function NewHabitPage() {
             <button
               type="button"
               onClick={() => setForm((f) => ({ ...f, is_shared: !f.is_shared }))}
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                form.is_shared ? 'bg-primary-500' : 'bg-gray-200'
+              className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
+                form.is_shared ? 'bg-primary-500' : 'bg-gray-200 dark:bg-slate-600'
               }`}
             >
               <span
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${
-                  form.is_shared ? 'translate-x-7' : 'translate-x-1'
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${
+                  form.is_shared ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
             </button>
             <div>
-              <div className="text-sm font-medium text-gray-700">Общая привычка</div>
-              <div className="text-xs text-gray-400">Можно приглашать других пользователей</div>
+              <div className="text-sm font-medium text-gray-700 dark:text-slate-300">Общая привычка</div>
+              <div className="text-xs text-gray-400 dark:text-slate-500">Можно приглашать других пользователей</div>
             </div>
           </div>
 

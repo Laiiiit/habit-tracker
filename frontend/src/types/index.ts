@@ -59,6 +59,7 @@ export interface HabitDetail extends Habit {
 
 export interface SharedHabit {
   id: string;
+  share_id: string; // sh.id из shared_habits
   habit_id: string;
   owner_id?: string;
   owner_name?: string;

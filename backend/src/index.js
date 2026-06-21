@@ -7,6 +7,7 @@ const { startCronJobs } = require('./services/cron');
 const authRoutes = require('./routes/auth');
 const habitsRoutes = require('./routes/habits');
 const sharedRoutes = require('./routes/shared');
+const eventsRoutes = require('./routes/events');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -25,6 +26,7 @@ app.get('/health', (_, res) => res.json({ status: 'ok', ts: new Date().toISOStri
 app.use('/api/auth', authRoutes);
 app.use('/api/habits', habitsRoutes);
 app.use('/api/shared', sharedRoutes);
+app.use('/api/events', eventsRoutes);
 
 // 404
 app.use((_, res) => res.status(404).json({ error: 'Not found' }));

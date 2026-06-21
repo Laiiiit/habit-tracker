@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="borderGrad" x1="0" y1="120" x2="120" y2="0">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="50%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="checkGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#16A34A"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#16A34A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square border -->
+  <rect x="6" y="6" width="108" height="108" rx="26" ry="26"
+        stroke="url(#borderGrad)" stroke-width="7" fill="white"/>
+
+  <!-- Dot 1 (blue) -->
+  <circle cx="30" cy="44" r="7" fill="#3B82F6"/>
+  <!-- Line 1 -->
+  <rect x="44" y="40" width="28" height="7" rx="3.5" fill="#CBD5E1"/>
+
+  <!-- Dot 2 (light blue) -->
+  <circle cx="30" cy="64" r="7" fill="#93C5FD"/>
+  <!-- Line 2 -->
+  <rect x="44" y="60" width="22" height="7" rx="3.5" fill="#CBD5E1"/>
+
+  <!-- Dot 3 (green) -->
+  <circle cx="30" cy="84" r="7" fill="#4ADE80"/>
+  <!-- Line 3 -->
+  <rect x="44" y="80" width="30" height="7" rx="3.5" fill="#CBD5E1"/>
+
+  <!-- Checkmark -->
+  <path d="M58 68 L68 80 L88 52" stroke="url(#checkGrad)"
+        stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Leaf in top-right -->
+  <path d="M93 10 C93 10 112 14 108 30 C104 44 93 40 93 40 C93 40 93 26 93 10Z"
+        fill="url(#leafGrad)"/>
+  <path d="M93 10 C93 10 93 26 93 40" stroke="white" stroke-width="1.5"
+        stroke-linecap="round"/>
+</svg>
